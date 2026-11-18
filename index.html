@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trailhead SD – Local Hiking Guide</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#1d2b24;--mut:#5d6b63;--acc:#2f6b4f;--acc2:#e9f2ec;--bd:#d9d6ca;--err:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a17;--card:#1d2621;--ink:#ecf1ed;--mut:#9bab9f;--acc:#6fc29a;--acc2:#233229;--bd:#33423a;--err:#ff8a80}}
+:root[data-theme="dark"]{--bg:#141a17;--card:#1d2621;--ink:#ecf1ed;--mut:#9bab9f;--acc:#6fc29a;--acc2:#233229;--bd:#33423a;--err:#ff8a80}
+*{box-sizing:border-box}html{scroll-padding-top:70px;height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--bd);z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.bar{max-width:1000px;margin:auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.15rem;color:var(--acc);margin-right:auto}
+nav a{color:var(--ink);text-decoration:none;margin:0 8px;font-size:.95rem}nav a:hover{color:var(--acc)}
+main{max-width:1000px;margin:auto;padding:16px}
+.hero{background:var(--acc2);border:1px solid var(--bd);border-radius:16px;padding:28px 20px;margin-bottom:24px}
+.hero h1{margin:0 0 6px;font-size:clamp(1.6rem,5vw,2.4rem)}.hero p{margin:0;color:var(--mut);max-width:60ch}
+h2{margin:28px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.card h3{margin:0}.meta{color:var(--mut);font-size:.88rem}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;background:var(--acc2);color:var(--acc);font-weight:600;width:fit-content}
+button,.btn{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--acc);background:var(--acc);color:#fff;padding:8px 14px}
+button.ghost{background:transparent;color:var(--acc)}button.del{border-color:var(--err);color:var(--err);background:transparent}
+.row{display:flex;gap:8px;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+form{display:grid;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;max-width:560px}
+label{display:grid;gap:4px;font-size:.9rem;color:var(--mut)}
+input,select,textarea{font:inherit;padding:9px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--ink);width:100%}
+.note{padding:12px 14px;border-radius:10px;background:var(--acc2);border:1px solid var(--bd);font-size:.92rem}
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+footer{max-width:1000px;margin:30px auto 20px;padding:0 16px;color:var(--mut);font-size:.85rem}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <span class="logo">⛰️ Trailhead SD</span>
+  <nav><a href="#trails">Trails</a><a href="#contact">Contact</a><a href="#admin" id="navAdmin" class="hide">Admin</a></nav>
+  <span id="who" class="meta"></span><button id="authBtn" class="ghost">Sign in</button>
+</div></header>
+<main>
+  <section class="hero">
+    <h1>Find your next San Diego hike</h1>
+    <p>A community-curated guide to local trails. Browse the public preview below; admins sign in to add, edit and remove trails.</p>
+  </section>
+
+  <section id="trails">
+    <h2>Trail guide</h2>
+    <div id="mode" class="note" style="margin-bottom:12px"></div>
+    <div id="list" class="grid" aria-live="polite"></div>
+  </section>
+
+  <section id="admin" class="hide">
+    <h2>Admin dashboard</h2>
+    <form id="f">
+      <strong id="ftitle">Add a trail</strong>
+      <label>Name<input id="name" required maxlength="80"></label>
+      <label>Location<input id="loc" required maxlength="80"></label>
+      <label>Difficulty<select id="diff"><option>Easy</option><option>Moderate</option><option>Hard</option></select></label>
+      <label>Distance (miles)<input id="mi" type="number" step="0.1" min="0" required></label>
+      <label>Description<textarea id="desc" rows="3" maxlength="400"></textarea></label>
+      <div class="row"><button type="submit" id="save">Add trail</button><button type="button" class="ghost" id="cancel">Cancel edit</button></div>
+    </form>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="contact">
+      <div class="card"><strong>Email</strong><a href="mailto:Parra133@csusm.edu">Parra133@csusm.edu</a></div>
+      <div class="card"><strong>Phone</strong><a href="tel:+16195550142">(760) 750-4000</a></div>
+      <div class="card"><strong>Office</strong><span>123 333 S Twin Oaks Valley Rd, San Marcos, CA 92096</span><span class="meta">Mon–Fri, 9am–5pm</span></div>
+    </div>
+  </section>
+</main>
+<dialog id="dlg" style="border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--ink);max-width:340px;width:90%">
+<form id="af" method="dialog" style="border:0;padding:0">
+<strong>Sign in or create an account</strong>
+<label>Email<input id="em" type="email" required autocomplete="email"></label>
+<label>Password (6+ characters)<input id="pw" type="password" required minlength="6" autocomplete="current-password"></label>
+<div id="aerr" class="meta" style="color:var(--err)"></div>
+<div class="row"><button type="button" id="in">Sign in</button><button type="button" id="up" class="ghost">Sign up</button><button type="button" id="x" class="ghost">Close</button></div>
+</form></dialog>
+<footer>© Trailhead SD · Student project. Sign-in is handled by the viewer; only editors/owners see the admin tools.</footer>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,doc,getDoc,addDoc,updateDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 1) PASTE YOUR FIREBASE CONFIG HERE (Project settings > Your apps > Web app)
+const firebaseConfig = {
+  apiKey: "AIzaSyCU4urgs5AmO12RMX4j0tChoqt5v7Zx94g",
+  authDomain: "trailhead-app-8bbc8.firebaseapp.com",
+  projectId: "trailhead-app-8bbc8",
+  storageBucket: "trailhead-app-8bbc8.firebasestorage.app",
+  messagingSenderId: "136852839481",
+  appId: "1:136852839481:web:df6ed8ef8b03938cc901e8",
+  measurementId: "G-3X0DYNQLTW"
+};
+
+const PREVIEW=[
+ {id:"p1",name:"Torrey Pines Beach Trail",loc:"La Jolla",diff:"Easy",mi:2.1,desc:"Sandstone bluffs and ocean views along a short coastal loop."},
+ {id:"p2",name:"Cowles Mountain",loc:"San Carlos",diff:"Moderate",mi:3.0,desc:"The highest point in the city, with a steady climb and sweeping views."},
+ {id:"p3",name:"Cedar Creek Falls",loc:"Ramona",diff:"Hard",mi:5.0,desc:"A rocky descent to a waterfall. Permit required."}];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let fb=!!firebaseConfig.apiKey,auth,db,me=null,isAdmin=false,trails=PREVIEW,editing=null;
+
+function render(){
+ $("list").innerHTML=trails.map(t=>`<article class="card"><span class="tag">${esc(t.diff)}</span><h3>${esc(t.name)}</h3>
+ <div class="meta">${esc(t.loc)} · ${Number(t.mi)||0} mi</div><p style="margin:0">${esc(t.desc)}</p>
+ ${isAdmin&&!String(t.id).startsWith("p")?`<div class="row"><button class="ghost" data-e="${esc(t.id)}">Edit</button><button class="del" data-d="${esc(t.id)}">Delete</button></div>`:""}</article>`).join("")||'<p class="meta">No trails yet.</p>';
+ $("mode").textContent=!fb?"Preview mode: add your Firebase config to enable login and the database.":!me?"Public preview: sign in to manage content (admins only).":isAdmin?"Signed in as admin: you can add, edit and delete trails.":"Signed in as a member (view only).";
+ $("who").textContent=me?me.email:"Guest";$("authBtn").textContent=me?"Sign out":"Sign in";
+ $("admin").classList.toggle("hide",!isAdmin);$("navAdmin").classList.toggle("hide",!isAdmin);
+}
+if(fb){
+ const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
+ onSnapshot(collection(db,"trails"),s=>{trails=s.docs.map(d=>({id:d.id,...d.data()}));if(!trails.length)trails=PREVIEW;render()},()=>render());
+ onAuthStateChanged(auth,async u=>{me=u;isAdmin=false;
+  if(u){try{isAdmin=(await getDoc(doc(db,"admins",u.uid))).exists()}catch(e){}}render()});
+}
+$("authBtn").onclick=()=>{if(!fb)return alert("Add your Firebase config first.");me?signOut(auth):$("dlg").showModal()};
+$("x").onclick=()=>$("dlg").close();
+const go=fn=>async()=>{try{await fn(auth,$("em").value,$("pw").value);$("dlg").close();$("aerr").textContent=""}catch(e){$("aerr").textContent=e.code||e.message}};
+$("in").onclick=go(signInWithEmailAndPassword);$("up").onclick=go(createUserWithEmailAndPassword);
+
+$("list").addEventListener("click",async e=>{
+ const d=e.target.dataset.d,ed=e.target.dataset.e;
+ if(d&&confirm("Delete this trail?")){try{await deleteDoc(doc(db,"trails",d))}catch(x){alert("Delete failed: "+x.code)}}
+ if(ed){const t=trails.find(t=>t.id===ed);editing=ed;$("name").value=t.name;$("loc").value=t.loc;$("diff").value=t.diff;$("mi").value=t.mi;$("desc").value=t.desc;
+  $("ftitle").textContent="Edit trail";$("save").textContent="Save changes";location.hash="admin"}});
+function reset(){editing=null;$("f").reset();$("ftitle").textContent="Add a trail";$("save").textContent="Add trail"}
+$("cancel").onclick=reset;
+$("f").addEventListener("submit",async e=>{e.preventDefault();
+ const data={name:$("name").value.trim(),loc:$("loc").value.trim(),diff:$("diff").value,mi:parseFloat($("mi").value),desc:$("desc").value.trim(),updated:Date.now()};
+ try{editing?await updateDoc(doc(db,"trails",editing),data):await addDoc(collection(db,"trails"),data);reset()}catch(x){alert("Save failed: "+x.code)}});
+render();
+</script>
+</body></html>
